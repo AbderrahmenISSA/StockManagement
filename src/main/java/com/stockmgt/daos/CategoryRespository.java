@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.stockmgt.entities.Category;
 
+/**
+ * @author Abderrahmen ISSA
+ */
 @Repository
 public interface CategoryRespository extends JpaRepository<Category, Integer> {
 

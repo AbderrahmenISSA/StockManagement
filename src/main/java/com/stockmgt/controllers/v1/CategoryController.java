@@ -1,6 +1,7 @@
 package com.stockmgt.controllers.v1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmgt.daos.CategoryRespository;
 import com.stockmgt.dtos.CategoryDTO;
-import com.stockmgt.dtos.DTOUtils;
 import com.stockmgt.entities.Category;
+import com.stockmgt.utils.DTOUtils;
 
 /**
  * CRUD rest webservice.
+ * 
+ * @author Abderrahmen ISSA
+ * 
  */
 @RestController
 @RequestMapping(path = CategoryController.GATEGORIES_V1)
@@ -27,7 +31,7 @@ public class CategoryController {
 	protected static final String GATEGORIES_V1 = "stockmgt/v1/gategories";
 
 	@Autowired
-	CategoryRespository categoryRespository;
+	private CategoryRespository categoryRespository;
 
 	@GetMapping
 	public List<CategoryDTO> index() {
@@ -37,12 +41,13 @@ public class CategoryController {
 	@GetMapping("/{id}")
 	public CategoryDTO show(@PathVariable String id) {
 		Integer CategoryId = Integer.parseInt(id);
-		return (CategoryDTO) DTOUtils.convertToDTO(categoryRespository.findOne(CategoryId));
+		Optional<Category> category = categoryRespository.findById(CategoryId);
+		return (CategoryDTO) DTOUtils.convertToDTO(category.get());
 	}
 
 	@DeleteMapping("/{id}")
-	public boolean delete(@PathVariable String id) {
-		categoryRespository.delete(Integer.parseInt(id));
+	public boolean delete(@PathVariable Integer id) {
+		categoryRespository.deleteById(id);
 		return true;
 	}
 

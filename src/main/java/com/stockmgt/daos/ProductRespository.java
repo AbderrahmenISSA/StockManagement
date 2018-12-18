@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.stockmgt.entities.Product;
 
+/**
+ * @author Abderrahmen ISSA
+ */
 @Repository
 public interface ProductRespository extends JpaRepository<Product, Integer> {
 
-    List<Product> findByCategoryName(String categoryName);
+	List<Product> findByCategoryCategoryName(String categoryName);
 
 }

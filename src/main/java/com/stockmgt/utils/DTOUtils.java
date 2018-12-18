@@ -1,4 +1,4 @@
-package com.stockmgt.dtos;
+package com.stockmgt.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,12 +7,15 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
+import com.stockmgt.dtos.BasicDTO;
+import com.stockmgt.dtos.CategoryDTO;
+import com.stockmgt.dtos.ProductDTO;
 import com.stockmgt.entities.Category;
 import com.stockmgt.entities.Product;
 
 /**
  * 
- * @author ext-aissa
+ * @author Abderrahmen ISSA
  *
  */
 public class DTOUtils {

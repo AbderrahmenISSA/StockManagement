@@ -1,6 +1,7 @@
 package com.stockmgt.controllers.v1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmgt.daos.CategoryRespository;
 import com.stockmgt.daos.ProductRespository;
-import com.stockmgt.dtos.DTOUtils;
 import com.stockmgt.dtos.ProductDTO;
 import com.stockmgt.entities.Category;
 import com.stockmgt.entities.Product;
+import com.stockmgt.utils.DTOUtils;
 
+/**
+ * CRUD rest webservice.
+ * 
+ * @author Abderrahmen ISSA
+ *
+ */
 @RestController
 @RequestMapping(path = ProductController.PRODUCT_V1)
 public class ProductController {
@@ -27,10 +34,10 @@ public class ProductController {
 	protected static final String PRODUCT_V1 = "stockmgt/v1";
 
 	@Autowired
-	ProductRespository productRespository;
+	private ProductRespository productRespository;
 
 	@Autowired
-	CategoryRespository categoryRespository;
+	private CategoryRespository categoryRespository;
 
 	@GetMapping("/products")
 	public List<ProductDTO> index() {
@@ -38,45 +45,45 @@ public class ProductController {
 	}
 
 	@GetMapping("/products/{id}")
-	public ProductDTO show(@PathVariable String id) {
-		Integer productId = Integer.parseInt(id);
-		return (ProductDTO) DTOUtils.convertToDTO(productRespository.findOne(productId));
+	public ProductDTO show(@PathVariable Integer productId) {
+		Optional<Product> product = productRespository.findById(productId);
+		return (ProductDTO) DTOUtils.convertToDTO(product.get());
 	}
 
 	@PostMapping("/categories/{catId}/products")
 	public ProductDTO create(@PathVariable(value = "catId") Integer catId, @RequestBody ProductDTO productDTO) {
-		Category category = categoryRespository.findOne(catId);
+		Optional<Category> category = categoryRespository.findById(catId);
 		if (category == null) {
 			return null;
 		}
 
 		Product entity = (Product) DTOUtils.convertToEntity(productDTO);
-		entity.setCategory(category);
+		entity.setCategory(category.get());
 		return (ProductDTO) DTOUtils.convertToDTO(productRespository.save(entity));
 	}
 
 	@PutMapping("/categories/{catId}/products/{prodId}")
 	public ProductDTO update(@PathVariable(value = "catId") Integer catId,
 			@PathVariable(value = "prodId") Integer prodId, @RequestBody ProductDTO productDTO) {
-		Category category = categoryRespository.findOne(catId);
+		Optional<Category> category = categoryRespository.findById(catId);
 		if (category == null) {
 			return null;
 		}
 
-		Product productFromDB = productRespository.findOne(prodId);
+		Optional<Product> productFromDB = productRespository.findById(prodId);
 		if (productFromDB == null) {
 			return null;
 		}
-		productFromDB.setCategory(category);
+		productFromDB.get().setCategory(category.get());
 
 		Product newProduct = (Product) DTOUtils.convertToEntity(productDTO);
 		BeanUtils.copyProperties(newProduct, productFromDB, "id", "category");
-		return (ProductDTO) DTOUtils.convertToDTO(productRespository.save(productFromDB));
+		return (ProductDTO) DTOUtils.convertToDTO(productRespository.save(productFromDB.get()));
 	}
 
-	@DeleteMapping("/{id}")
-	public boolean delete(@PathVariable String id) {
-		productRespository.delete(Integer.parseInt(id));
+	@DeleteMapping("/products/{id}")
+	public boolean delete(@PathVariable Integer id) {
+		productRespository.deleteById(id);
 		return true;
 	}
 

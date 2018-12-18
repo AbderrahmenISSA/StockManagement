@@ -1,6 +1,7 @@
 package com.stockmgt.controllers.v2;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,20 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmgt.daos.CategoryRespository;
 import com.stockmgt.dtos.CategoryDTO;
-import com.stockmgt.dtos.DTOUtils;
 import com.stockmgt.entities.Category;
+import com.stockmgt.errors.RestError;
+import com.stockmgt.utils.DTOUtils;
 
 /**
  * We implement here recommended HTTP status codes.
+ * 
+ * @author Abderrahmen ISSA
+ * 
  */
 @RestController
 @RequestMapping(path = CategoryControllerV2.GATEGORIES_V2)
 public class CategoryControllerV2 {
 
-	protected static final String GATEGORIES_V2 = "stockmgt/v2/gategories";
+	protected static final String GATEGORIES_V2 = "stockmgt/v2/categories";
 
 	@Autowired
-	CategoryRespository categoryRespository;
+	private CategoryRespository categoryRespository;
 
 	@GetMapping
 	public List<CategoryDTO> index() {
@@ -55,26 +60,26 @@ public class CategoryControllerV2 {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable String id) {
 		Integer CategoryId = Integer.parseInt(id);
-		Category category = categoryRespository.findOne(CategoryId);
-		if (category == null) {
+		Optional<Category> category = categoryRespository.findById(CategoryId);
+		if (!category.isPresent()) {
 			RestError error = new RestError();
 			error.setError("Entity not found.");
-			error.setError_code(HttpStatus.NOT_FOUND.value());
-			error.setError_description("No class " + Category.class.getName() + " entity with id " + id + " exists");
+			error.setStatus(HttpStatus.NOT_FOUND.value());
+			error.setMessage("No class " + Category.class.getName() + " entity with id " + id + " exists");
 			return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>((CategoryDTO) DTOUtils.convertToDTO(category), HttpStatus.OK);
+		return new ResponseEntity<>((CategoryDTO) DTOUtils.convertToDTO(category.get()), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable String id) {
+	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {
-			categoryRespository.delete(Integer.parseInt(id));
+			categoryRespository.deleteById(id);
 		} catch (EmptyResultDataAccessException ex) {
 			RestError error = new RestError();
 			error.setError("Entity not found or has been deleted.");
-			error.setError_code(HttpStatus.NOT_FOUND.value());
-			error.setError_description("No class " + Category.class.getName() + " entity with id " + id + " exists");
+			error.setStatus(HttpStatus.NOT_FOUND.value());
+			error.setMessage("No class " + Category.class.getName() + " entity with id " + id + " exists");
 			return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
