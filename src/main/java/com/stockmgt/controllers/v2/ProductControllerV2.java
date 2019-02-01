@@ -65,6 +65,7 @@ public class ProductControllerV2 {
 		return new ResponseEntity<>((ProductDTO) DTOUtils.convertToDTO(product.get()), HttpStatus.OK);
 	}
 
+	@CrossOrigin
 	@PostMapping("/categories/{catId}/products")
 	public ResponseEntity<?> create(@PathVariable(value = "catId") Integer catId, @RequestBody ProductDTO productDTO) {
 		Optional<Category> category = categoryRespository.findById(catId);
@@ -100,6 +101,7 @@ public class ProductControllerV2 {
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
+	@CrossOrigin
 	@DeleteMapping("/products/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {

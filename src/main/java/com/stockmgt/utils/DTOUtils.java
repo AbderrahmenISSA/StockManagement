@@ -2,6 +2,7 @@ package com.stockmgt.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -25,12 +26,12 @@ public class DTOUtils {
 	 * @param entity
 	 * @return
 	 */
-	public static BasicDTO convertToDTO(Serializable entity) {
+	public static BasicDTO convertToDTO(Serializable entity, String... ignoreProperties) {
 		if (entity instanceof Category) {
-			return convertToDTO((Category) entity);
+			return convertToDTO((Category) entity, ignoreProperties);
 		}
 		if (entity instanceof Product) {
-			return convertToDTO((Product) entity);
+			return convertToDTO((Product) entity, ignoreProperties);
 		}
 		return null;
 	}
@@ -51,13 +52,13 @@ public class DTOUtils {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> convertToDTOs(List<? extends java.io.Serializable> entities) {
+	public static <T> List<T> convertToDTOs(List<? extends java.io.Serializable> entities, String... ignoreProperties) {
 		if (CollectionUtils.isEmpty(entities)) {
 			return null;
 		}
 
 		List<T> result = new ArrayList<>();
-		entities.forEach(e -> result.add((T) convertToDTO(e)));
+		entities.forEach(e -> result.add((T) convertToDTO(e, ignoreProperties)));
 
 		return result;
 	}
@@ -71,13 +72,13 @@ public class DTOUtils {
 	 * @param category
 	 * @return
 	 */
-	private static CategoryDTO convertToDTO(Category category) {
+	private static CategoryDTO convertToDTO(Category category, String... ignoreProperties) {
 		if (category == null) {
 			return null;
 		}
 
 		CategoryDTO result = new CategoryDTO();
-		BeanUtils.copyProperties(category, result);
+		BeanUtils.copyProperties(category, result, ignoreProperties);
 
 		return result;
 	}
@@ -87,17 +88,20 @@ public class DTOUtils {
 	 * @param product
 	 * @return
 	 */
-	private static ProductDTO convertToDTO(Product product) {
+	private static ProductDTO convertToDTO(Product product, String... ignoreProperties) {
 		if (product == null) {
 			return null;
 		}
 
 		ProductDTO result = new ProductDTO();
-		BeanUtils.copyProperties(product, result);
+		BeanUtils.copyProperties(product, result, ignoreProperties);
 
-		Category category = product.getCategory();
-		if (category != null) {
-			result.setCategory(convertToDTO(category));
+		List<String> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);
+		if (ignoreList == null ||  ignoreList != null && !ignoreList.contains("category")) {
+			Category category = product.getCategory();
+			if (category != null) {
+				result.setCategory(convertToDTO(category));
+			}
 		}
 
 		return result;
