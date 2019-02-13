@@ -1,6 +1,7 @@
 package com.stockmgt.controllers.v2;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,9 @@ public class ProductControllerV2 {
 
 		Product entity = (Product) DTOUtils.convertToEntity(productDTO);
 		entity.setCategory(category.get());
-		entity.setCreatedAt(Calendar.getInstance().getTime());
+		Date createdAt = Calendar.getInstance().getTime();
+		entity.setCreatedAt(createdAt);
+		entity.setUpdatedAt(createdAt);
 		ProductDTO result = (ProductDTO) DTOUtils.convertToDTO(productRespository.save(entity));
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
