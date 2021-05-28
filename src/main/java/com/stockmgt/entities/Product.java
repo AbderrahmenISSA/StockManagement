@@ -32,8 +32,7 @@ public class Product implements java.io.Serializable {
 	private String productName;
 	private String productCode;
 	private Integer stock;
-	private Double priceHt;
-	private Double priceTtc;
+	private String priceLabel;
 	private Date createdAt;
 	private Date updatedAt;
 
@@ -42,18 +41,6 @@ public class Product implements java.io.Serializable {
 
 	public Product(String productName) {
 		this.productName = productName;
-	}
-
-	public Product(Category category, String productName, String productCode, Integer stock, Double priceHt,
-			Double priceTtc, Date createdAt, Date updatedAt) {
-		this.category = category;
-		this.productName = productName;
-		this.productCode = productCode;
-		this.stock = stock;
-		this.priceHt = priceHt;
-		this.priceTtc = priceTtc;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 	}
 
 	@Id
@@ -105,22 +92,13 @@ public class Product implements java.io.Serializable {
 		this.stock = stock;
 	}
 
-	@Column(name = "price_ht", precision = 22, scale = 0)
-	public Double getPriceHt() {
-		return this.priceHt;
+	@Column(name = "price_label", length = 45)
+	public String getPriceLabel() {
+		return priceLabel;
 	}
 
-	public void setPriceHt(Double priceHt) {
-		this.priceHt = priceHt;
-	}
-
-	@Column(name = "price_ttc", precision = 22, scale = 0)
-	public Double getPriceTtc() {
-		return this.priceTtc;
-	}
-
-	public void setPriceTtc(Double priceTtc) {
-		this.priceTtc = priceTtc;
+	public void setPriceLabel(String priceLabel) {
+		this.priceLabel = priceLabel;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -170,7 +148,7 @@ public class Product implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Product [name=" + productName + ", price=" + priceTtc + "]";
+		return "Product [name=" + productName + ", price=" + priceLabel + "]";
 	}
 
 }

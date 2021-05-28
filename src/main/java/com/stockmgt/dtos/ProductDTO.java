@@ -28,8 +28,7 @@ public class ProductDTO extends BasicDTO {
 	private String productName;
 	private String productCode;
 	private Integer stock;
-	private Double priceHt;
-	private Double priceTtc;
+	private String priceLabel;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
 	private Date createdAt;
@@ -42,10 +41,10 @@ public class ProductDTO extends BasicDTO {
 
 	@Override
 	public String toString() {
-		return "Product [name=" + productName + ", price=" + priceTtc + "]";
+		return "Product [name=" + productName + ", price=" + priceLabel + "]";
 	}
 	
 	
-	public static List<String> fields = Arrays.asList("productName", "productCode", "stock", "priceHt", "priceTtc", "createdAt", "updatedAt", "category");
+	public static List<String> fields = Arrays.asList("productName", "productCode", "stock", "priceLabel", "createdAt", "updatedAt", "category");
 
 }

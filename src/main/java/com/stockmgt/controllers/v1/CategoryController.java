@@ -25,10 +25,10 @@ import com.stockmgt.utils.DTOUtils;
  * 
  */
 @RestController
-@RequestMapping(path = CategoryController.GATEGORIES_V1)
+@RequestMapping(path = CategoryController.CATEGORIES_V1)
 public class CategoryController {
 
-	protected static final String GATEGORIES_V1 = "stockmgt/v1/gategories";
+	protected static final String CATEGORIES_V1 = "stockmgt/api/v1/categories";
 
 	@Autowired
 	private CategoryRespository categoryRespository;

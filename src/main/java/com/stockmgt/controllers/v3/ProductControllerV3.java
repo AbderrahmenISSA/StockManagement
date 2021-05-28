@@ -34,7 +34,7 @@ import com.stockmgt.utils.DTOUtils;
 @RequestMapping(path = ProductControllerV3.PRODUCT_V3)
 public class ProductControllerV3 {
 
-	protected static final String PRODUCT_V3 = "stockmgt/v3";
+	protected static final String PRODUCT_V3 = "stockmgt/api/v3";
 
 	@Autowired
 	private ProductRespository productRespository;
