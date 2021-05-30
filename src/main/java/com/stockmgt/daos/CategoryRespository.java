@@ -10,5 +10,7 @@ import com.stockmgt.entities.Category;
  */
 @Repository
 public interface CategoryRespository extends JpaRepository<Category, Integer> {
+	
+	Category findByCategoryName(String categoryName);
 
 }

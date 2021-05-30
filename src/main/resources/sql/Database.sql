@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS `stockmanagement`.`category` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NOT NULL,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `category_name_UNIQUE` (`category_name` ASC))
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = utf8;
