@@ -33,7 +33,7 @@ public class CategoryControllerMockitoTest {
 	@Test
 	public void testCreation() {
 		// given
-		given(categoryRespository.save(any(Category.class))).willReturn(userEntity(1));
+		given(categoryRespository.save(any(Category.class))).willReturn(categoryEntity(1));
 
 		// when
 		CategoryDTO dto = new CategoryDTO("Boissons");
@@ -44,7 +44,7 @@ public class CategoryControllerMockitoTest {
 		Assertions.assertEquals(result.getId(), 1);
 	}
 
-	private Category userEntity(Integer id) {
+	private Category categoryEntity(Integer id) {
 		return new Category(id, "Boissons", new Date());
 	}
 }
