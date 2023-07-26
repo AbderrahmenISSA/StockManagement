@@ -44,7 +44,7 @@ public class ProductController {
 		return DTOUtils.convertToDTOs(productRespository.findAll());
 	}
 
-	@GetMapping("/products/{id}")
+	@GetMapping("/products/{productId}")
 	public ProductDTO show(@PathVariable Integer productId) {
 		Optional<Product> product = productRespository.findById(productId);
 		return (ProductDTO) DTOUtils.convertToDTO(product.get());
